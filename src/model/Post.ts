@@ -1,16 +1,15 @@
-export class Post {
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
+@Entity()
+export default class Post {
+
+  @PrimaryGeneratedColumn()
   id: number
-  title: string
-  text: string
-  createDate: Date = new Date()
 
-  constructor (id: number,
-               title: string,
-               text: string) {
-    this.id = id
-    this.title = title
-    this.text = text
-  }
+  @Column()
+  title: string
+
+  @Column('text')
+  text: string
 
 }

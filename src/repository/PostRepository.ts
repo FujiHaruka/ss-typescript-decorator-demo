@@ -1,41 +1,28 @@
 import { Service } from 'typedi'
-import { Post } from '../model/Post'
+import { InjectRepository } from 'typeorm-typedi-extensions'
+import { Repository } from 'typeorm'
+import Post from '../model/Post'
 
 @Service()
 export class PostRepository {
 
-  private posts = [
-    new Post(1, 'post #1', 'about post #1'),
-    new Post(2, 'post #2', 'about post #2'),
-    new Post(3, 'post #3', 'about post #3'),
-    new Post(4, 'post #4', 'about post #4'),
-  ]
+  @InjectRepository(Post)
+  private repository: Repository<Post>
 
   findAll () {
-    return Promise.resolve(this.posts)
+    return this.repository.find()
   }
 
   findOne (id: number) {
-    let foundPost: Post = undefined
-    this.posts.forEach(post => {
-      if (post.id === id) {
-        foundPost = post
-      }
-    })
-    return foundPost
+    return this.repository.findOneById(id)
   }
 
   save (post: Post) {
-    this.posts.push(post)
-    return post
+    return this.repository.save(post)
   }
 
   remove (id: number) {
-    const post = this.findOne(id)
-    if (post) {
-      this.posts.splice(this.posts.indexOf(post), 1)
-    }
-    return post
+    return this.repository.removeById(id)
   }
 
 }
